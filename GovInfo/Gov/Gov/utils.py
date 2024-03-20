@@ -1,33 +1,29 @@
-import os
+import sys
+sys.path.append('..')
 import requests
-import django
-from models import MemberOfParliament
 from bs4 import BeautifulSoup
+from parliament.models import MemberOfParliament
+import time
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Gov.settings')
-django.setup()
+def find_mps():
+    url = 'http://www.parliament.go.ke/the-national-assembly/mps'
+    response = requests.get(url).text
 
-url = 'http://www.parliament.go.ke/the-national-assembly/mps'
-response = requests.get(url)
-
-if response.status_code == 200:
-    soup = BeautifulSoup(response.content,'html.parser')
+    soup = BeautifulSoup(response, 'lxml')
     mp_elems = soup.find_all('tr', class_='mp')
 
-    for mp in mp_elems:
+    for index, mp in enumerate(mp_elems):
         name = mp.find('td', class_='views-field views-field-field-name').text.strip()
         constituency = mp.find('td', class_='views-field views-field-field-constituency').text.strip()
         county = mp.find('td', class_='views-field views-field-field-county').text.strip()
         party = mp.find('td', class_='views-field views-field-field-party').text.strip()
+        
         if constituency:
-            mp_obj = MemberOfParliament.objects.create(
-                    name=name,
-                    constituency=constituency,
-                    county=county,
-                    party=party
-            )
-            print(f'Member of Parliament saved: {mp_obj.name}')
-        else:
-            print('Not saved')
-else:
-    print('Failed to retrieve data from the website')
+            mp_object = MemberOfParliament(name=name, constituency=constituency, county=county, party=party)
+            mp_object.save()
+
+
+if __name__ == '__main__':
+    while True:
+        find_mps()
+        time.sleep(24 * 60 * 60)

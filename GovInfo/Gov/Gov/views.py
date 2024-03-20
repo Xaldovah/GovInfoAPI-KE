@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from .models import Gov
 from parliament.models import MemberOfParliament
+from .utils import find_mps
 from .serializers import GovSerializer, MpSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -26,6 +27,7 @@ def gov_list(request, format=None):
     Gets elective offices
     """
     if request.method == 'GET':
+        find_mps()
         gov = Gov.objects.all()
         serializer = GovSerializer(gov, many=True)
         return Response(serializer.data)
