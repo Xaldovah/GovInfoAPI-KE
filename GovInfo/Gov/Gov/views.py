@@ -251,7 +251,7 @@ def search_governor_by_county(request, county, format=None):
     Get governor by county
     """
     if request.method == 'GET':
-        county = county.lower()
+        county = ''.join(filter(str.isalpha, county)).lower()
         try:
             governor = Governors.objects.get(county__iexact=county)
             serializer = GovernorSerializer(governor)
