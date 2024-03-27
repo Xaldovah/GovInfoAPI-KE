@@ -7,11 +7,11 @@ class Gov(models.Model):
     This is a class that reprsents all elected members
     """
     office = models.CharField(max_length=200)
-    functions = models.CharField(max_length=500, validators=[MinLengthValidator(100)])
+    functions = models.CharField(
+            max_length=500, validators=[MinLengthValidator(100)]) 
     salary = models.CharField(max_length=50)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-
 
     class Meta:
         """

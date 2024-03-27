@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
+    'county',
+    'senate',
+    'Governor',
     'Gov',
     'parliament',
     'django.contrib.admin',

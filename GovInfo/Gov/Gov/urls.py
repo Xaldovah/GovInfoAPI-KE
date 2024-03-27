@@ -1,29 +1,18 @@
-"""
-URL configuration for Gov project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 from Gov import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.urlpatterns import format_suffix_patterns        
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('gov/', views.gov_list),
     path('mps/', views.mps_list),
-    path('mps/<int:id>', views.mps_detail)
+    path('mps/<str:constituency>/', views.search_mp_by_constituency),
+    path('senators/', views.senators_list),
+    path('senators/<str:county>/', views.search_senator_by_county),  
+    path('governors/', views.governors_list),
+    path('governors/<str:county>/', views.search_governor_by_county),
+    path('mcas/', views.mcas_list),
+    path('mcas/<str:ward>/', views.search_mca_by_ward)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
