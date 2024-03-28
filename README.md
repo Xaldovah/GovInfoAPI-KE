@@ -26,10 +26,11 @@ GovInfoAPI-KE is an API service designed to provide users with information about
 3. **Accessing API Endpoints**
 
 Use HTTP GET requests to access various API endpoints:
-```/mps: Retrieve information about Members of Parliament.
-```/senators: Retrieve information about Senators.
-```/governors: Retrieve information about Governors.
-```/mcas: Retrieve information about Members of County Assembly (MCAs).
+/mps: Retrieve information about Members of Parliament.
+/senators: Retrieve information about Senators.
+/governors: Retrieve information about Governors.
+/mcas: Retrieve information about Members of County Assembly (MCAs).
+
 Ensure proper authentication and authorization to access sensitive information.
 
 ## Contributing
