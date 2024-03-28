@@ -33,9 +33,9 @@ git push origin feature/your-feature
 ## Code Style Guidelines
 Please follow the existing code style and conventions used in the project. Here are some general guidelines:
 
--Use descriptive variable names and comments to make the code understandable.
--Follow the PEP 8 style guide for Python code.
--Use consistent indentation (typically 4 spaces).
+- Use descriptive variable names and comments to make the code understandable.
+- Follow the PEP 8 style guide for Python code.
+- Use consistent indentation (typically 4 spaces).
 
 ### Testing
 Ensure that your code changes are properly tested. Write unit tests to cover new features or changes, and ensure that all existing tests pass.
