@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Gov
-from parliament.models import MemberOfParliament 
+from parliament.models import MemberOfParliament
 from senate.models import Senators
 from Governor.models import Governors
 from county.models import MCA
@@ -8,7 +8,7 @@ from county.models import MCA
 
 class GovSerializer(serializers.ModelSerializer):
     """
-    class to serialize the position data to json 
+    class to serialize the position data to json
     """
 
     class Meta:
@@ -16,10 +16,10 @@ class GovSerializer(serializers.ModelSerializer):
         serializer
         """
         model = Gov
-        fields = ['id', 'office', 'salary']      
+        fields = ['id', 'office', 'salary']
 
 
-class MpSerializer(serializers.ModelSerializer): 
+class MpSerializer(serializers.ModelSerializer):
     """
     class to serialize mps data to json
     """

@@ -19,13 +19,14 @@ def extract_page_data(driver):
                     By.XPATH, '//tr[contains(@class, "mp")]')
             for each_element in page_elements:
                 name = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-name').text.strip()        
+                        By.CLASS_NAME, 'views-field-field-name').text.strip()
                 constituency = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-constituency').text.strip()
+                        By.CLASS_NAME,
+                        'views-field-field-constituency').text.strip()
                 county = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-county').text.strip()      
+                        By.CLASS_NAME, 'views-field-field-county').text.strip()
                 party = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-party').text.strip()       
+                        By.CLASS_NAME, 'views-field-field-party').text.strip()
 
                 if constituency and party:
                     mp_data = {

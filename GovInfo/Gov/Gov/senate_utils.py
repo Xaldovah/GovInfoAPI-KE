@@ -20,11 +20,14 @@ def extract_senate_data(driver):
                     By.XPATH, '//tr[not(@class)]')
             for each_element in page_elements:
                 name = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-senator').text.strip()       
+                        By.CLASS_NAME,
+                        'views-field-field-senator').text.strip()
                 county = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-county-senator').text.strip()
+                        By.CLASS_NAME,
+                        'views-field-field-county-senator').text.strip()
                 party = each_element.find_element(
-                        By.CLASS_NAME, 'views-field-field-party-senator').text.strip() 
+                        By.CLASS_NAME,
+                        'views-field-field-party-senator').text.strip()
 
                 if county != "Nominated" and name != "Senator":
                     senator_data = {

@@ -8,7 +8,8 @@ from parliament.models import MemberOfParliament
 from senate.models import Senators
 from Governor.models import Governors
 from county.models import MCA
-from .serializers import MpSerializer, SenatorSerializer, GovernorSerializer, McaSerializer
+from .serializers import MpSerializer, SenatorSerializer, GovernorSerializer
+from .serializers import McaSerializer
 from .mp_utils import extract_page_data
 from .senate_utils import extract_senate_data
 from selenium import webdriver
@@ -34,7 +35,9 @@ class CustomAnonThrottle(AnonRateThrottle):
     rate = '5/day'
 
 
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver = webdriver.Chrome(
+        service=ChromeService(ChromeDriverManager().install()))
+
 
 @api_view(['GET', 'POST'])
 def gov_list(request, format=None):
@@ -122,11 +125,14 @@ def search_mp_by_constituency(request, constituency, format=None):
     if request.method == 'GET':
         constituency = constituency.lower()
         try:
-            mp = MemberOfParliament.objects.get(constituency__iexact=constituency)
+            mp = MemberOfParliament.objects.get(
+                    constituency__iexact=constituency)
             serializer = MpSerializer(mp)
             return Response(serializer.data)
         except MemberOfParliament.DoesNotExist:
-            return Response({"message": "MP not found for the given constituency"}, status=404)
+            return Response({
+                "message": "MP not found for the given constituency"},
+                status=404)
 
 
 @api_view(['GET', 'POST'])
@@ -182,7 +188,9 @@ def search_senator_by_county(request, county, format=None):
             serializer = SenatorSerializer(senator)
             return Response(serializer.data)
         except Senators.DoesNotExist:
-            return Response({"message": "Senator not found for the given county"}, status=404)
+            return Response(
+                    {"message": "Senator not found for the given county"},
+                    status=404)
 
 
 @api_view(['GET', 'POST'])
@@ -226,7 +234,8 @@ def governors_list(request, format=None):
         governors_data_rows = [row.find_all('td') for row in governor_rows]
         governor_data = []
 
-        for county_name, county_prefix, data_row in zip(county_names, county_prefixes, governors_data_rows):
+        for county_name, county_prefix, data_row in zip(
+                county_names, county_prefixes, governors_data_rows):
             for cell in data_row:
                 governor_name = cell.text.strip()
                 if governor_name and governor_name != county_name:
@@ -237,8 +246,8 @@ def governors_list(request, format=None):
 
         # Save data to the SQLite database
         for governor_data_entry in governor_data:
-                governor_object = Governors(**governor_data_entry)
-                governor_object.save()
+            governor_object = Governors(**governor_data_entry)
+            governor_object.save()
 
         governors = Governors.objects.all()
         serializer = GovernorSerializer(governors, many=True)
@@ -257,7 +266,9 @@ def search_governor_by_county(request, county, format=None):
             serializer = GovernorSerializer(governor)
             return Response(serializer.data)
         except Governors.DoesNotExist:
-            return Response({"message": "Governor not found for the given county"}, status=404)
+            return Response({
+                "message": "Governor not found for the given county"},
+                status=404)
 
 
 @api_view(['GET', 'POST'])
@@ -271,7 +282,8 @@ def mcas_list(request, format=None):
             serializer = McaSerializer(mcas, many=True)
             return Response(serializer.data)
 
-        url = requests.get('https://www.nyongesasande.com/mcas-in-kenya-per-county-2022-to-2027/')
+        url = requests.get(
+                'https://www.nyongesasande.com/mcas-in-kenya-per-county-2022-to-2027/')
         soup = BeautifulSoup(url.content, 'html.parser')
 
         mca_tags = soup.find_all('p')[4:]
@@ -284,7 +296,9 @@ def mcas_list(request, format=None):
 
         filtered_mcas = []
         for line in mca_text_separated.split('\n'):
-            if not line.startswith('Check out other tags:') and not line.startswith('©Nyongesa Sande'):
+            if not line.startswith(
+                    'Check out other tags:') and not line.startswith(
+                            '©Nyongesa Sande'):
 
                 # Remove text from "Check" to the end of the line
                 line = line.split('Check')[0].strip()
@@ -321,15 +335,20 @@ def search_mca_by_ward(request, ward, format=None):
             serializer = McaSerializer(mca)
             return Response(serializer.data)
         except MCA.DoesNotExist:
-            return Response({"message": "MCA not found for the given ward"}, status=404)
+            return Response({
+                "message": "MCA not found for the given ward"},
+                status=404)
 
 
 gov_list.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
 mps_list.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
-search_mp_by_constituency.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
+search_mp_by_constituency.throttle_classes = [
+        CustomUserThrottle, CustomAnonThrottle]
 senators_list.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
-search_senator_by_county.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
+search_senator_by_county.throttle_classes = [
+        CustomUserThrottle, CustomAnonThrottle]
 governors_list.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
-search_governor_by_county.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
+search_governor_by_county.throttle_classes = [
+        CustomUserThrottle, CustomAnonThrottle]
 mcas_list.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
 search_mca_by_ward.throttle_classes = [CustomUserThrottle, CustomAnonThrottle]
